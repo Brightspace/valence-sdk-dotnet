@@ -1,1 +1,7 @@
 *.suo
+lib/D2L.Extensibility.AuthSdk.IntegrationTests/bin/*
+lib/D2L.Extensibility.AuthSdk.IntegrationTests/obj/*
+lib/D2L.Extensibility.AuthSdk.UnitTests/bin/*
+lib/D2L.Extensibility.AuthSdk.UnitTests/obj/*
+lib/D2L.Extensibility.AuthSdk/bin/*
+lib/D2L.Extensibility.AuthSdk/obj/*
