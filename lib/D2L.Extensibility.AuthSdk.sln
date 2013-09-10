@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F1118A17-454B-437D-BA24-FC8A3A901A3E}"
+	ProjectSection(SolutionItems) = preProject
+		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Extensibility.AuthSdk", "D2L.Extensibility.AuthSdk\D2L.Extensibility.AuthSdk.csproj", "{2809EA0A-360C-48F2-B24A-F7244876135A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Extensibility.AuthSdk.UnitTests", "D2L.Extensibility.AuthSdk.UnitTests\D2L.Extensibility.AuthSdk.UnitTests.csproj", "{926A5290-9D94-4A77-9C3D-98380E0B901A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Extensibility.AuthSdk.IntegrationTests", "D2L.Extensibility.AuthSdk.IntegrationTests\D2L.Extensibility.AuthSdk.IntegrationTests.csproj", "{18F44624-5476-4F70-8081-C01124AA209F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2809EA0A-360C-48F2-B24A-F7244876135A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2809EA0A-360C-48F2-B24A-F7244876135A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2809EA0A-360C-48F2-B24A-F7244876135A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2809EA0A-360C-48F2-B24A-F7244876135A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{926A5290-9D94-4A77-9C3D-98380E0B901A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{926A5290-9D94-4A77-9C3D-98380E0B901A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{926A5290-9D94-4A77-9C3D-98380E0B901A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{926A5290-9D94-4A77-9C3D-98380E0B901A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18F44624-5476-4F70-8081-C01124AA209F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18F44624-5476-4F70-8081-C01124AA209F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18F44624-5476-4F70-8081-C01124AA209F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18F44624-5476-4F70-8081-C01124AA209F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

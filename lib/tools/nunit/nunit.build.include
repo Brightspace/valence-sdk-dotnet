@@ -1,0 +1,5 @@
+<project name="nunit" xmlns="http://schemas.desire2learn.com/xml/schemas/nant.xsd">
+	<relativepath property="nunit.root" path="." />
+	<callmacro name="build.import.assembly" path="${nunit.root}\nunit.framework.dll"/>
+	<property name="nunit.console" value="${nunit.root}\nunit-console.exe" />
+</project>
