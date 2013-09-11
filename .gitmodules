@@ -1,0 +1,3 @@
+[submodule "samples/bookwidget-sample"]
+	path = samples/bookwidget-sample
+	url = http://github.com/Desire2Learn-Valence/bookwidget-sample
