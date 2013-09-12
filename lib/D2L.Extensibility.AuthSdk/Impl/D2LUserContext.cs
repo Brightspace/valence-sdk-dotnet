@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Web;
-using StructureMap;
 
 namespace D2L.Extensibility.AuthSdk.Impl {
 
@@ -86,19 +84,20 @@ namespace D2L.Extensibility.AuthSdk.Impl {
         /// <summary>
         /// Constructs a D2LUserContext with the parameters provided
         /// </summary>
+        /// <param name="timestampProvider">The system timestamp provider</param>
         /// <param name="appId">The D2L app ID</param>
         /// <param name="appKey">The D2L app key</param>
         /// <param name="userId">The D2L user ID to be used</param>
         /// <param name="userKey">The D2L user key to be used</param>
         /// <param name="apiHost">The host information of the server to make API calls to</param>
-		internal D2LUserContext( string appId, string appKey, string userId, string userKey, HostSpec apiHost ) {
+		internal D2LUserContext( ITimestampProvider timestampProvider, string appId, string appKey, string userId, string userKey, HostSpec apiHost ) {
 			m_appId = appId;
 			m_appKey = appKey;
 			m_userId = userId;
 			m_userKey = userKey;
 			m_apiHost = apiHost;
-			m_timestampProvider = ObjectFactory.GetInstance<ITimestampProvider>();
-		}
+	        m_timestampProvider = timestampProvider;
+        }
 		
         /// <summary>
         /// Constructs a query string with the necessary auth parameters to connect to a D2L API server

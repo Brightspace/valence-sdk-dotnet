@@ -2,26 +2,28 @@
 
 namespace D2L.Extensibility.AuthSdk {
 
-    /// <summary>
-    /// A class for providing an instance of ID2LAppContext
-    /// </summary>
+	/// <summary>
+	/// A class for providing an instance of ID2LAppContext
+	/// </summary>
 	public class D2LAppContextFactory {
 
-        /// <summary>
-        /// Default constructor for D2LAppContextFactory
-        /// </summary>
-		public D2LAppContextFactory() {
-			DependencyContainer.BootstrapStructureMap();
+		private readonly ITimestampProvider m_timestampProvider;
+
+		/// <summary>
+		/// Default constructor for D2LAppContextFactory
+		/// </summary>
+		public D2LAppContextFactory( ITimestampProvider timestampProvider = null ) {
+			m_timestampProvider = timestampProvider ?? new DefaultTimestampProvider();
 		}
 
-        /// <summary>
-        /// Creates an instance of ID2LAppContext with the specified app ID and app key
-        /// </summary>
-        /// <param name="appId">The D2L app ID</param>
-        /// <param name="appKey">The D2L app key</param>
-        /// <returns>An instance of ID2LAppContext</returns>
+		/// <summary>
+		/// Creates an instance of ID2LAppContext with the specified app ID and app key
+		/// </summary>
+		/// <param name="appId">The D2L app ID</param>
+		/// <param name="appKey">The D2L app key</param>
+		/// <returns>An instance of ID2LAppContext</returns>
 		public ID2LAppContext Create( string appId, string appKey ) {
-			return new D2LAppContext( appId, appKey );
+			return new D2LAppContext( appId, appKey, m_timestampProvider );
 		}
 	}
 }
