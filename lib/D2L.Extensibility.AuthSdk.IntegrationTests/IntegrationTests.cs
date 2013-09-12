@@ -353,6 +353,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		private static HttpWebRequest CreateRequest( Uri uri ) {
 			var request = (HttpWebRequest) WebRequest.Create( uri );
 			request.Method = "GET";
+			request.Accept = "*/*";
 
 			//	keep the timeout at least 10 seconds,
 			//	otherwise some important errors turn into "operation timed-out" errors
