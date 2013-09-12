@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using System.Globalization;
@@ -14,8 +13,8 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 
 		[SetUp]
 		public void SetUpAppContext() {
-			m_appContext = TestUtils.CreateAppContextUnderTest();
-			TestUtils.SetUpTimestampProviderStub( TestConstants.TIMESTAMP_MILLISECONDS );
+			var timestampProvider = TestUtils.CreateTimestampProviderStub( TestConstants.TIMESTAMP_MILLISECONDS );
+			m_appContext = TestUtils.CreateAppContextUnderTest( timestampProvider );
 			m_userContext = CreateUserContextUnderTest();
 			m_anonContext = CreateAnonymousContextUnderTest();
 		}
@@ -67,8 +66,12 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		public void UserContext_CreateAuthUri_ResultQueryParam_x_t_MatchesAdjustedTimestampInSeconds() {
 			const string httpMethod = "PUT";
 			const long serverClockSkewMilliseconds = 225000;
-			TestUtils.SetUpTimestampProviderStub(
+
+			var timestampProvider = TestUtils.CreateTimestampProviderStub( 
 				TestConstants.TIMESTAMP_MILLISECONDS - serverClockSkewMilliseconds );
+
+			m_appContext = TestUtils.CreateAppContextUnderTest( timestampProvider );
+
 			var userContext = CreateUserContextUnderTest();
 			userContext.ServerSkewMillis = serverClockSkewMilliseconds;
 
@@ -157,9 +160,14 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		public void AnonymousUserContext_CreateAuthUri_ResultQueryParam_x_t_MatchesAdjustedTimestampInSeconds() {
 			const string httpMethod = "PUT";
 			const long serverClockSkewMilliseconds = 213000;
-			TestUtils.SetUpTimestampProviderStub(
+
+			var timestampProvider = TestUtils.CreateTimestampProviderStub( 
 				TestConstants.TIMESTAMP_MILLISECONDS - serverClockSkewMilliseconds );
+
+			m_appContext = TestUtils.CreateAppContextUnderTest( timestampProvider );
+
 			var anonContext = CreateAnonymousContextUnderTest();
+
 			anonContext.ServerSkewMillis = serverClockSkewMilliseconds;
 
 			Uri authUri = anonContext.CreateAuthenticatedUri( TestConstants.API_PATH, httpMethod );
@@ -205,7 +213,12 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 			string expectedParameter = TestUtils.CalculateParameterExpectation(
 				TestConstants.APP_KEY, httpMethod,
 				TestConstants.API_PATH, TestConstants.TIMESTAMP_SECONDS );
-			TestUtils.SetUpTimestampProviderStub( TestConstants.TIMESTAMP_MILLISECONDS - serverClockSkewMilliseconds );
+
+			var timestampProvider = TestUtils.CreateTimestampProviderStub( 
+				TestConstants.TIMESTAMP_MILLISECONDS - serverClockSkewMilliseconds );
+
+			m_appContext = TestUtils.CreateAppContextUnderTest( timestampProvider );
+
 			var userContext = CreateUserContextUnderTest();
 			userContext.ServerSkewMillis = serverClockSkewMilliseconds;
 

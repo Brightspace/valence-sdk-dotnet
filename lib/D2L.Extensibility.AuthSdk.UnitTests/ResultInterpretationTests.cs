@@ -86,9 +86,11 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 
 		[Test]
 		public void UserContext_InterpretResult_Upon403_ChangesServerSkewProperty_ByTimestampDifference() {
-			var appContext = TestUtils.CreateAppContextUnderTest();
 			const long clientTimeSeconds = 1319000000L;
-			TestUtils.SetUpTimestampProviderStub( clientTimeSeconds * 1000 );
+
+			var timestampProvider = TestUtils.CreateTimestampProviderStub( clientTimeSeconds * 1000 );
+			var appContext = TestUtils.CreateAppContextUnderTest( timestampProvider );
+
 			var apiHost = TestUtils.CreateTestHost();
 			var userContext = appContext.CreateAnonymousUserContext( apiHost );
 			const long serverAheadBy = 907L;
