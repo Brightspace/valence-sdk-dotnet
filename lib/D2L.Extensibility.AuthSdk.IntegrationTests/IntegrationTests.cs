@@ -7,7 +7,6 @@ using System.Threading;
 using System.Web.Script.Serialization;
 
 using NUnit.Framework;
-using StructureMap;
 
 namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 	[TestFixture]
@@ -266,7 +265,9 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		
 		[Test]
 		public void SendAuthenticatedRequestWithDelayedTimestamp_ResponseMustContainTimeOffset() {
-			SetTimestampProviderDelay( TEST_TIME_DELAY );
+
+			m_appContext = CreateAppContextWithDelay( m_appId, m_appKey, TEST_TIME_DELAY );
+
 			var userContext = CreateUserOperationContext();
 			var uri = userContext.CreateAuthenticatedUri( GET_ORGANIZATION_INFO_ROUTE, "GET" );
 
@@ -286,7 +287,9 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
 		[Test]
 		public void RetryAuthenticatedRequestWithCorrectedTimestamp_ResultCodeIs200() {
-			SetTimestampProviderDelay( TEST_TIME_DELAY );
+
+			m_appContext = CreateAppContextWithDelay( m_appId, m_appKey, TEST_TIME_DELAY );
+
 			var userContext = CreateUserOperationContext();
 			var uri = userContext.CreateAuthenticatedUri( GET_ORGANIZATION_INFO_ROUTE, "GET" );
 			var request = (HttpWebRequest) WebRequest.Create( uri );
@@ -350,6 +353,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		private static HttpWebRequest CreateRequest( Uri uri ) {
 			var request = (HttpWebRequest) WebRequest.Create( uri );
 			request.Method = "GET";
+			request.Accept = "*/*";
 
 			//	keep the timeout at least 10 seconds,
 			//	otherwise some important errors turn into "operation timed-out" errors
@@ -372,13 +376,15 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			return resource;
 		}
 
-		private static void SetTimestampProviderDelay( long seconds ) {
-			ObjectFactory.Initialize( x => {
-				x.For<ITimestampProvider>()
-				.Use<LateTimestampProvider>()
-				.WithCtorArg( "lagSeconds" )
-				.EqualTo( seconds );
-			} );
+		private static ID2LAppContext CreateAppContextWithDelay( string appId, string appKey, long delaySeconds ) {
+
+			var timestampProvider = CreateTimestampProviderDelay( delaySeconds );
+			var factory = new D2LAppContextFactory( timestampProvider );
+			return factory.Create( appId, appKey );
+		}
+
+		private static ITimestampProvider CreateTimestampProviderDelay( long seconds ) {
+			return new LateTimestampProvider( seconds );
 		}
 
 		private ID2LUserContext CreateUserOperationContext() {

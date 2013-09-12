@@ -1,11 +1,12 @@
 ﻿using System;
 using D2L.Extensibility.AuthSdk.Impl;
-using StructureMap;
 
 namespace D2L.Extensibility.AuthSdk.UnitTests {
 	internal sealed class TestUtils {
-		internal static ID2LAppContext CreateAppContextUnderTest() {
-			var factory = new D2LAppContextFactory();
+		internal static ID2LAppContext CreateAppContextUnderTest( ITimestampProvider timestampProvider = null ) {
+
+			timestampProvider = timestampProvider ?? new DefaultTimestampProvider();
+			var factory = new D2LAppContextFactory( timestampProvider );
 			return factory.Create( TestConstants.APP_ID, TestConstants.APP_KEY );
 		}
 
@@ -49,14 +50,9 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 			string signedResult = D2LSigner.GetBase64HashString( key, unsignedResult );
 			return signedResult;
 		}
-		
-		internal static void SetUpTimestampProviderStub( long milliseconds ) {
-			ObjectFactory.Initialize( x => {
-				x.For<ITimestampProvider>()
-				.Use<TimestampProviderStub>()
-				.WithCtorArg( "milliseconds" )
-				.EqualTo( milliseconds );
-			} );
+
+		internal static ITimestampProvider CreateTimestampProviderStub( long milliseconds ) {
+			return new TimestampProviderStub( milliseconds );
 		}
 	}
 }

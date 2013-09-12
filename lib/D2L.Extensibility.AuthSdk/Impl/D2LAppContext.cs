@@ -23,27 +23,28 @@ namespace D2L.Extensibility.AuthSdk.Impl {
 			if( userId == null || userKey == null ) {
 				return null;
 			}
-			return new D2LUserContext( m_appId, m_appKey, userId, userKey, apiHost );
+			return new D2LUserContext( m_timestampProvider, m_appId, m_appKey, userId, userKey, apiHost );
 		}
 
 		ID2LUserContext ID2LAppContext.CreateUserContext(
 			string userId, string userKey, HostSpec apiHost ) {
 
-			return new D2LUserContext( m_appId, m_appKey, userId, userKey, apiHost );
+			return new D2LUserContext( m_timestampProvider, m_appId, m_appKey, userId, userKey, apiHost );
 		}
 		
 		ID2LUserContext ID2LAppContext.CreateUserContext( UserContextProperties savedProps ) {
 			var apiHost = new HostSpec( savedProps.Scheme, savedProps.HostName, savedProps.Port );
-			return new D2LUserContext( m_appId, m_appKey, savedProps.UserId, savedProps.UserKey, apiHost );
+			return new D2LUserContext( m_timestampProvider, m_appId, m_appKey, savedProps.UserId, savedProps.UserKey, apiHost );
 		}
 
         ID2LUserContext ID2LAppContext.CreateAnonymousUserContext( HostSpec apiHost ) {
-            return new D2LUserContext( m_appId, m_appKey, null, null, apiHost );
+            return new D2LUserContext( m_timestampProvider, m_appId, m_appKey, null, null, apiHost );
         }
 
-		internal D2LAppContext( string appId, string appKey ) {
+		internal D2LAppContext( string appId, string appKey, ITimestampProvider timestampProvider ) {
 			m_appId = appId;
 			m_appKey = appKey;
+			m_timestampProvider = timestampProvider;
 		}
 
         /// <summary>
@@ -59,7 +60,9 @@ namespace D2L.Extensibility.AuthSdk.Impl {
 			result += "&" + CALLBACK_URL_PARAMETER + "=" + HttpUtility.UrlEncode( callbackUriString );
 			return result;
 		}
-		
+
+	    private readonly ITimestampProvider m_timestampProvider;
+
 		private readonly string m_appId;
 		private readonly string m_appKey;
 

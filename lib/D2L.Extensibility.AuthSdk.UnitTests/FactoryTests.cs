@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using StructureMap;
 
 namespace D2L.Extensibility.AuthSdk.UnitTests {
 	public class FactoryTests {
@@ -10,14 +9,6 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 			var context = factory.Create( "foo", "bar" );
 
 			Assert.IsInstanceOf<ID2LAppContext>( context );
-		}
-
-		[Test]
-		public void StructureMap_UponAppContextFactoryConstruction_HasWiringFor_ITimestampProvider() {
-			new D2LAppContextFactory();
-
-			var timestampProvider = ObjectFactory.GetInstance<ITimestampProvider>();
-			Assert.IsNotNull( timestampProvider );
 		}
 	}
 }
