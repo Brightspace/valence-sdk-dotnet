@@ -61,6 +61,18 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 			Assert.AreEqual( expectedParameter, parameter );
 		}
 
+		[Test]
+		public void UserContext_CreateAuthTokens_ResultQueryParam_x_d_Matches_SignatureSignedWithUserKey() {
+			const string httpMethod = "GET";
+			string expectedParameter = TestUtils.CalculateParameterExpectation(
+				TestConstants.USER_KEY, httpMethod,
+				TestConstants.API_PATH, TestConstants.TIMESTAMP_SECONDS );
+
+			var tokens = m_userContext.CreateAuthenticatedTokens( TestConstants.API_PATH, httpMethod );
+
+			string parameter = TestUtils.GetTokenParameter( tokens, "x_d" );
+			Assert.AreEqual( expectedParameter, parameter );
+		}
 
 		[Test]
 		public void UserContext_CreateAuthUri_ResultQueryParam_x_t_MatchesAdjustedTimestampInSeconds() {
@@ -128,6 +140,14 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		}
 
 		[Test]
+		public void AnonymousUserContext_CreateAuthTokens_ResultQueryParam_x_a_IsSameAs_AppId() {
+
+			var tokens = m_anonContext.CreateAuthenticatedTokens( TestConstants.API_PATH, "PUT" );
+			string parameter = TestUtils.GetTokenParameter( tokens, "x_a" );
+			Assert.AreEqual( TestConstants.APP_ID, parameter );
+		}
+
+		[Test]
 		public void AnonymousUserContext_CreateAuthUri_ResultQueryParam_x_c_Matches_SignatureSignedWithAppKey() {
 			const string httpMethod = "POST";
 			string expectedParameter = TestUtils.CalculateParameterExpectation(
@@ -141,10 +161,30 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		}
 
 		[Test]
+		public void AnonymousUserContext_CreateAuthTokens_ResultQueryParam_x_c_Matches_SignatureSignedWithAppKey() {
+			const string httpMethod = "POST";
+			string expectedParameter = TestUtils.CalculateParameterExpectation(
+				TestConstants.APP_KEY, httpMethod,
+				TestConstants.API_PATH, TestConstants.TIMESTAMP_SECONDS );
+
+			var tokens = m_anonContext.CreateAuthenticatedTokens( TestConstants.API_PATH, httpMethod );
+
+			string parameter = TestUtils.GetTokenParameter( tokens, "x_c" );
+			Assert.AreEqual( expectedParameter, parameter );
+		}
+
+		[Test]
 		public void AnonymousUserContext_CreateAuthUri_ResultQueryParam_x_b_Matches_UserId() {
 			Uri authUri = m_anonContext.CreateAuthenticatedUri( TestConstants.API_PATH, "GET" );
 
 			Assert.Throws<ArgumentException>( () => TestUtils.GetUriQueryParameter( authUri, "x_b" ) );
+		}
+
+		[Test]
+		public void AnonymousUserContext_CreateAuthTokens_ResultQueryParam_x_b_Matches_UserId() {
+			var tokens = m_anonContext.CreateAuthenticatedTokens( TestConstants.API_PATH, "GET" );
+
+			Assert.Throws<ArgumentException>( () => TestUtils.GetTokenParameter( tokens, "x_b" ) );
 		}
 
 		[Test]
