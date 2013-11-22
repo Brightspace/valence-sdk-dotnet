@@ -27,7 +27,7 @@ namespace D2L.Extensibility.AuthSdk {
         /// <param name="fullUrl">The fullUrl to the server with the route to call.</param>
         /// <param name="httpMethod">The http method to make the call with</param>
         /// <returns>The resultant URI</returns>
-        Uri CreateAuthenticateUri( Uri fullUrl, string httpMethod );
+        Uri CreateAuthenticatedUri( Uri fullUrl, string httpMethod );
 
         /// <summary>
         /// Creates the tokens to access the D2L server with the given path and http method

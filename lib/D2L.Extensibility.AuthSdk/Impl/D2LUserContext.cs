@@ -26,10 +26,10 @@ namespace D2L.Extensibility.AuthSdk.Impl {
         Uri ID2LUserContext.CreateAuthenticatedUri(string path, string httpMethod) {
 
             Uri initialUri = CreateApiUrl(path);
-            return CreateAuthenticateUri(initialUri, httpMethod);
+            return CreateAuthenticatedUri(initialUri, httpMethod);
         }
 
-        public Uri CreateAuthenticateUri(Uri fullUrl, string httpMethod) {
+        public Uri CreateAuthenticatedUri(Uri fullUrl, string httpMethod) {
 
 	        var tokens = CreateAuthenticatedTokens(fullUrl, httpMethod);
 
