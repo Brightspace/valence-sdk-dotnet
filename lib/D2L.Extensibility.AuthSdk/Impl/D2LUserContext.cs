@@ -23,7 +23,7 @@ namespace D2L.Extensibility.AuthSdk.Impl {
             return builder.Uri;
         }
 
-        Uri ID2LUserContext.CreateAuthenticatedUri(string path, string httpMethod) {
+        public Uri CreateAuthenticatedUri(string path, string httpMethod) {
 
             Uri initialUri = CreateApiUrl(path);
             return CreateAuthenticatedUri(initialUri, httpMethod);
@@ -31,7 +31,7 @@ namespace D2L.Extensibility.AuthSdk.Impl {
 
         public Uri CreateAuthenticatedUri(Uri fullUrl, string httpMethod) {
 
-	        var tokens = CreateAuthenticatedTokens(fullUrl, httpMethod);
+            var tokens = CreateAuthenticatedTokens(fullUrl, httpMethod);
 
             var queryTokens = tokens.Select(token => token.Item1 + "=" + token.Item2);
 

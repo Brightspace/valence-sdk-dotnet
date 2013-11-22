@@ -49,7 +49,17 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		}
 
 		[Test]
+		public void UserContext_CreateAuthFullUri_ResultQueryParam_x_b_Matches_UserId() {
+
+			Uri authUri = m_userContext.CreateAuthenticatedUri( TestConstants.API_URL, "GET" );
+
+			string parameter = TestUtils.GetUriQueryParameter( authUri, "x_b" );
+			Assert.AreEqual( TestConstants.USER_ID, parameter );
+		}
+
+		[Test]
 		public void UserContext_CreateAuthUri_ResultQueryParam_x_d_Matches_SignatureSignedWithUserKey() {
+
 			const string httpMethod = "GET";
 			string expectedParameter = TestUtils.CalculateParameterExpectation(
 				TestConstants.USER_KEY, httpMethod,
@@ -62,13 +72,44 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		}
 
 		[Test]
+		public void UserContext_CreateAuthFullUri_ResultQueryParam_x_d_Matches_SignatureSignedWithUserKey() {
+
+			Uri fullUrl = new Uri(TestConstants.API_URL);
+			const string httpMethod = "GET";
+			string expectedParameter = TestUtils.CalculateParameterExpectation(
+				TestConstants.USER_KEY, httpMethod,
+				fullUrl.AbsolutePath, TestConstants.TIMESTAMP_SECONDS );
+
+			Uri authUri = m_userContext.CreateAuthenticatedUri( fullUrl, httpMethod );
+
+			string parameter = TestUtils.GetUriQueryParameter( authUri, "x_d" );
+			Assert.AreEqual( expectedParameter, parameter );
+		}
+
+		[Test]
 		public void UserContext_CreateAuthTokens_ResultQueryParam_x_d_Matches_SignatureSignedWithUserKey() {
+
 			const string httpMethod = "GET";
 			string expectedParameter = TestUtils.CalculateParameterExpectation(
 				TestConstants.USER_KEY, httpMethod,
 				TestConstants.API_PATH, TestConstants.TIMESTAMP_SECONDS );
 
 			var tokens = m_userContext.CreateAuthenticatedTokens( TestConstants.API_PATH, httpMethod );
+
+			string parameter = TestUtils.GetTokenParameter( tokens, "x_d" );
+			Assert.AreEqual( expectedParameter, parameter );
+		}
+
+		[Test]
+		public void UserContext_CreateAuthTokensFullUrl_ResultQueryParam_x_d_Matches_SignatureSignedWithUserKey() {
+
+			Uri fullUrl = new Uri( TestConstants.API_URL );
+			const string httpMethod = "GET";
+			string expectedParameter = TestUtils.CalculateParameterExpectation(
+				TestConstants.USER_KEY, httpMethod,
+				fullUrl.AbsolutePath, TestConstants.TIMESTAMP_SECONDS );
+
+			var tokens = m_userContext.CreateAuthenticatedTokens( fullUrl, httpMethod );
 
 			string parameter = TestUtils.GetTokenParameter( tokens, "x_d" );
 			Assert.AreEqual( expectedParameter, parameter );
