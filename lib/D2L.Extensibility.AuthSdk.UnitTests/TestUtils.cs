@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 using D2L.Extensibility.AuthSdk.Impl;
 
 namespace D2L.Extensibility.AuthSdk.UnitTests {
@@ -40,6 +42,17 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 					return nameValuePair[1];
 				}
 			}
+			throw new ArgumentException( "didn't find query parameter " + name );
+		}
+
+		internal static string GetTokenParameter( IEnumerable<Tuple<string, string>> tokens, string name ) {
+
+			foreach( var token in tokens ) {
+				if( token.Item1 == name ) {
+					return token.Item2;
+				}
+			}
+
 			throw new ArgumentException( "didn't find query parameter " + name );
 		}
 
