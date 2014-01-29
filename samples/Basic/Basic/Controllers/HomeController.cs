@@ -14,7 +14,7 @@ namespace Basic.Controllers {
 		private const string APP_ID = "G9nUpvbZQyiPrk3um2YAkQ";
 		private const string APP_KEY = "ybZu7fm_JKJTFwKEHfoZ7Q";
 
-		private const string LMS_URL = "valence.desire2learn.com";
+		private const string LMS_URL = "lms.valence.desire2learn.com";
 
 		private const string LP_VERSION = "1.2";
 
