@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 using Basic.Models;
@@ -11,10 +12,10 @@ using RestSharp;
 
 namespace Basic.Controllers {
 	public class HomeController : Controller {
-		private const string APP_ID = "G9nUpvbZQyiPrk3um2YAkQ";
-		private const string APP_KEY = "ybZu7fm_JKJTFwKEHfoZ7Q";
+		private readonly string m_appId = WebConfigurationManager.AppSettings[ "valence_appId" ];
+		private readonly string m_appKey = WebConfigurationManager.AppSettings[ "valence_appKey" ];
 
-		private const string LMS_URL = "lms.valence.desire2learn.com";
+		private const string LMS_URL = "valence.desire2learn.com";
 
 		private const string LP_VERSION = "1.2";
 
@@ -26,12 +27,14 @@ namespace Basic.Controllers {
 
 		public HomeController( ) {
 			var appFactory = new D2LAppContextFactory();
-			m_valenceAppContext = appFactory.Create( APP_ID, APP_KEY );
+			m_valenceAppContext = appFactory.Create( m_appId, m_appKey );
 			m_valenceHost = new HostSpec( "https", LMS_URL, 443 );
 		}
 
 		private WhoAmIUser WhoAmI( ) {
-			Debug.Assert( m_valenceUserContext != null, "This call can only be used by an authenticated user" );
+			if( m_valenceUserContext == null ) {
+				throw new Exception( "This method can only be used for an authenticated user" );
+			}
 
 			var client = new RestClient( "https://" + LMS_URL );
 			var authenticator = new ValenceAuthenticator( m_valenceUserContext );
@@ -54,7 +57,9 @@ namespace Basic.Controllers {
 
 		public ActionResult NeedsAuth( ) {
 			var returnUrl = Url.Action( "AuthReturn", null, null, Request.Url.Scheme );
-			Debug.Assert( returnUrl != null, "Missing AuthReturn action" );
+			if( returnUrl == null ) {
+				throw new Exception( "Missing AuthReturn action" );
+			}
 			ViewBag.valenceAuthUrl = m_valenceAppContext.CreateUrlForAuthentication( m_valenceHost, new Uri( returnUrl ) );
 			return View();
 		}
