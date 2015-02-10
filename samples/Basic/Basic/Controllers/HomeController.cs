@@ -15,7 +15,7 @@ namespace Basic.Controllers {
 		private readonly string m_appId = WebConfigurationManager.AppSettings[ "valence_appId" ];
 		private readonly string m_appKey = WebConfigurationManager.AppSettings[ "valence_appKey" ];
 
-		private const string LMS_URL = "valence.desire2learn.com";
+		private readonly string LMS_URL = WebConfigurationManager.AppSettings[ "lms_host" ];
 
 		private const string LP_VERSION = "1.2";
 
