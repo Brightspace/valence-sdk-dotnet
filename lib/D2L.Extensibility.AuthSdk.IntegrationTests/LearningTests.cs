@@ -9,23 +9,29 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
     [TestFixture]
     public class LearningTests {
 
+        private HttpWebRequest m_request;
+
+        [SetUp]
+        public void TestSetup() {
+            m_request = RequestProvider.PrepareApiRequest( ContextProvider.BadUserContext(), RouteProvider.OrganizationInfoRoute );
+        }
+
         [Test]
         public void LearningTest_SendRequestWithBadKeys_ThrowsWebException() {
-            var request = RequestProvider.PrepareApiRequest( ContextProvider.BadUserContext(), RouteProvider.OrganizationInfoRoute );
-
-            Assert.Throws<WebException>( () => request.GetResponse() );
+            Assert.Throws<WebException>( () => { using ( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) { } } );
         }
 
         [Test]
         public void LearningTest_SendRequestWithBadKeys_ResponseBodyContains_Invalid_token() {
-            var request = RequestProvider.PrepareApiRequest( ContextProvider.BadUserContext(), RouteProvider.OrganizationInfoRoute );
+            string responseBody = string.Empty;
 
             try {
-                request.GetResponse();
+                using ( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) { }
             } catch ( WebException ex ) {
-                var responseBody = StringHelper.ReadResponseContents( ex.Response as HttpWebResponse );
-                Assert.IsTrue( responseBody.Equals( "Invalid token", StringComparison.InvariantCulture ) );
+                responseBody = StringHelper.ReadResponseContents( ex.Response as HttpWebResponse );
             }
+
+            Assert.IsTrue( responseBody.Equals( "Invalid token", StringComparison.InvariantCulture ) );
         }
     }
 }
