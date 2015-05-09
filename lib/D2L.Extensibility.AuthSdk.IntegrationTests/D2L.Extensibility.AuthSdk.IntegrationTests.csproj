@@ -70,6 +70,7 @@
     <Compile Include="Helpers\LateTimestampProvider.cs" />
     <Compile Include="Domain\Organization.cs" />
     <Compile Include="Domain\ProductVersions.cs" />
+    <Compile Include="SecurityTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs" />
