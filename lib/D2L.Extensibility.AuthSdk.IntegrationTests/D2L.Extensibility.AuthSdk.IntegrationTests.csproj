@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousRequestTests.cs" />
+    <Compile Include="AuthenticationTests.cs" />
     <Compile Include="Helpers\ConfigHelper.cs" />
     <Compile Include="LearningTests.cs">
       <SubType>Code</SubType>
