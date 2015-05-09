@@ -3,7 +3,7 @@ using System.Net;
 
 namespace D2L.Extensibility.AuthSdk.IntegrationTests.Providers {
 
-    internal static class RequestProvider {
+    internal class RequestProvider {
 
         internal static HttpWebRequest PrepareApiRequest( ID2LUserContext userContext, string route ) {
             Uri apiUri = userContext.CreateAuthenticatedUri( route, "GET" );

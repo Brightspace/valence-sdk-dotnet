@@ -66,6 +66,7 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnonymousRequestTests.cs" />
     <Compile Include="Helpers\ConfigHelper.cs" />
     <Compile Include="LearningTests.cs">
       <SubType>Code</SubType>

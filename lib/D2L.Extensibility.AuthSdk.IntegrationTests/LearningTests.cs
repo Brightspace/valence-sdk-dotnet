@@ -11,7 +11,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
         [Test]
         public void LearningTest_SendRequestWithBadKeys_ThrowsWebException() {
-            var request = RequestProvider.PrepareApiRequest( ContextProvider.BadUserContext() , RouteProvider.OrganizationInfoRoute );
+            var request = RequestProvider.PrepareApiRequest( ContextProvider.BadUserContext(), RouteProvider.OrganizationInfoRoute );
 
             Assert.Throws<WebException>( () => request.GetResponse() );
         }

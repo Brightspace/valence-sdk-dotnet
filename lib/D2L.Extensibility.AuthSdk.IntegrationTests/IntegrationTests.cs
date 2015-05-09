@@ -41,7 +41,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
         [Test]
 		public void SendRequestWithBadKeys_ResponseInterpretationIs_InvalidSig() {
-            var request = RequestProvider.PrepareApiRequest( m_badUserContext, GET_ORGANIZATION_INFO_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_badUserContext, RouteProvider.OrganizationInfoRoute );
 
 			try {
 				request.GetResponse();
@@ -68,7 +68,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		[Test]
 		public void SendRequest_AtUrlForAuthentication_ResponseReceived() {
 			var hostSpec = new HostSpec( m_scheme, m_host, m_port );
-			var landingUrl = new UriBuilder( m_scheme, m_host, m_port, GET_ORGANIZATION_INFO_ROUTE ).Uri;
+            var landingUrl = new UriBuilder( m_scheme, m_host, m_port, RouteProvider.OrganizationInfoRoute ).Uri;
 			var uri = m_appContext.CreateUrlForAuthentication( hostSpec, landingUrl );
 
             var request = RequestProvider.CreateRequest( uri );
@@ -79,7 +79,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		[Test]
 		public void SendRequest_AtUrlForAuthentication_StatusCodeIs200() {
 			var hostSpec = new HostSpec( m_scheme, m_host, m_port );
-			var landingUrl = new UriBuilder( m_scheme, m_host, m_port, GET_ORGANIZATION_INFO_ROUTE ).Uri;
+            var landingUrl = new UriBuilder( m_scheme, m_host, m_port, RouteProvider.OrganizationInfoRoute ).Uri;
 			var uri = m_appContext.CreateUrlForAuthentication( hostSpec, landingUrl );
 
             var request = RequestProvider.CreateRequest( uri );
@@ -91,14 +91,14 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		
 		[Test]
 		public void SendAuthenticatedRequest_ResponseReceived() {
-            var request = RequestProvider.PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_userContext, RouteProvider.OrganizationInfoRoute );
 
 			Assert.DoesNotThrow( () => request.GetResponse() );
 		}
 
 		[Test]
 		public void SendAuthenticatedRequest_StatusCodeIs200() {
-            var request = RequestProvider.PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_userContext, RouteProvider.OrganizationInfoRoute );
 
 			using( var response = request.GetResponse() as HttpWebResponse ) {
 				Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
@@ -108,7 +108,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
 		[Test]
 		public void SendAuthenticatedRequest_ResponseContentsIsNotEmpty() {
-            var request = RequestProvider.PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_userContext, RouteProvider.OrganizationInfoRoute );
 
 			using( var response = request.GetResponse() as HttpWebResponse ) {
                 string contents = StringHelper.ReadResponseContents( response );
@@ -118,50 +118,14 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		
 		[Test]
 		public void SendAuthenticatedRequest_ResponseContents_CanBeDeserializedAsJson() {
-            var request = RequestProvider.PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_userContext, RouteProvider.OrganizationInfoRoute );
 
 			using( var response = request.GetResponse() as HttpWebResponse ) {
-				var org = DeserializeResponseContents<Organization>( response );
+				var org = StringHelper.DeserializeResponseContents<Organization>( response );
 				Assert.IsNotNull( org );
 			}
 		}
 
-		[Test]
-		public void SendAnonymousRequest_ResponseReceived() {
-            var request = RequestProvider.PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
-
-			Assert.DoesNotThrow( () => request.GetResponse() );
-		}
-
-		[Test]
-		public void SendAnonymousRequest_StatusCodeIs200() {
-            var request = RequestProvider.PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
-
-			using( var response = request.GetResponse() as HttpWebResponse ) {
-				Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
-			}
-			Assert.DoesNotThrow( () => request.GetResponse() );
-		}
-
-		[Test]
-		public void SendAnonymousRequest_ResponseContentsIsNotEmpty() {
-            var request = RequestProvider.PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
-
-			using( var response = request.GetResponse() as HttpWebResponse ) {
-                string contents = StringHelper.ReadResponseContents( response );
-				Assert.IsNotNullOrEmpty( contents );
-			}
-		}
-
-		[Test]
-		public void SendAnonymousRequest_ResponseContents_CanBeDeserializedAsJson() {
-            var request = RequestProvider.PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
-
-			using( var response = request.GetResponse() as HttpWebResponse ) {
-				var versions = DeserializeResponseContents<ProductVersions[]>( response );
-				Assert.IsNotNull( versions );
-			}
-		}
 		
 		[Test]
 		public void SendAuthenticatedRequestWithDelayedTimestamp_ResponseMustContainTimeOffset() {
@@ -169,7 +133,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			m_appContext = CreateAppContextWithDelay( m_appId, m_appKey, TEST_TIME_DELAY );
 
 			var userContext = CreateUserOperationContext();
-			var uri = userContext.CreateAuthenticatedUri( GET_ORGANIZATION_INFO_ROUTE, "GET" );
+            var uri = userContext.CreateAuthenticatedUri( RouteProvider.OrganizationInfoRoute, "GET" );
 
 			var request = (HttpWebRequest) WebRequest.Create( uri );
 			request.Method = "GET";
@@ -191,7 +155,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			m_appContext = CreateAppContextWithDelay( m_appId, m_appKey, TEST_TIME_DELAY );
 
 			var userContext = CreateUserOperationContext();
-			var uri = userContext.CreateAuthenticatedUri( GET_ORGANIZATION_INFO_ROUTE, "GET" );
+            var uri = userContext.CreateAuthenticatedUri( RouteProvider.OrganizationInfoRoute, "GET" );
 			var request = (HttpWebRequest) WebRequest.Create( uri );
 			request.Method = "GET";
 			try {
@@ -201,7 +165,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 				var exWrapper = new D2LWebException( ex );
 				userContext.InterpretResult( exWrapper );
 			}
-			var retryUri = userContext.CreateAuthenticatedUri( GET_ORGANIZATION_INFO_ROUTE, "GET" );
+            var retryUri = userContext.CreateAuthenticatedUri( RouteProvider.OrganizationInfoRoute, "GET" );
 			m_asyncRequest = (HttpWebRequest) WebRequest.Create( retryUri );
 			m_asyncRequest.Method = "GET";
 
@@ -247,12 +211,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
 
 
-		private T DeserializeResponseContents<T>( HttpWebResponse response ) where T : class {
-            string contents = StringHelper.ReadResponseContents( response );
-			var serializer = new JavaScriptSerializer();
-			var resource = serializer.Deserialize<T>( contents );
-			return resource;
-		}
+
 
 		private static ID2LAppContext CreateAppContextWithDelay( string appId, string appKey, long delaySeconds ) {
 
@@ -298,7 +257,6 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		private string m_userId;
 		private string m_userKey;
 
-		private const string GET_ORGANIZATION_INFO_ROUTE = "/d2l/api/lp/1.0/organization/info";
 		private const string GET_VERSIONS_ROUTE = "/d2l/api/versions/";
 		private const long TEST_TIME_DELAY = 600L;
 	}
