@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IntegrationTests.cs" />
-    <Compile Include="LateTimestampProvider.cs" />
+    <Compile Include="Helpers\LateTimestampProvider.cs" />
     <Compile Include="Domain\Organization.cs" />
     <Compile Include="Domain\ProductVersions.cs" />
   </ItemGroup>

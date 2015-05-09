@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Web.Script.Serialization;
 using D2L.Extensibility.AuthSdk.IntegrationTests.Domain;
+using D2L.Extensibility.AuthSdk.IntegrationTests.Helpers;
 
 using NUnit.Framework;
 
