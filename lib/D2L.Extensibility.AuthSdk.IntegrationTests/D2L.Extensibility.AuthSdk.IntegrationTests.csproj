@@ -68,8 +68,8 @@
   <ItemGroup>
     <Compile Include="IntegrationTests.cs" />
     <Compile Include="LateTimestampProvider.cs" />
-    <Compile Include="Organization.cs" />
-    <Compile Include="ProductVersions.cs" />
+    <Compile Include="Domain\Organization.cs" />
+    <Compile Include="Domain\ProductVersions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs" />
