@@ -59,65 +59,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			}
 		}
 
-
-		//[Test]
-		//public void Example_1_Of_WhatClientCode_ShouldNotLookLike() {
-		//    var request = PrepareApiRequest( m_badUserContext, GET_ORGANIZATION_INFO_ROUTE );
-
-		//    try {
-		//        request.GetResponse();
-		//    } catch( WebException ex ) {
-		//        var castResponse = ex.Response as HttpWebResponse;
-		//        var statusCode = HttpStatusCode.NotFound;
-		//        string responseBody = "";
-		//        if( castResponse != null ) {
-		//            statusCode = castResponse.StatusCode;
-		//            using( var stream = castResponse.GetResponseStream() ) {
-		//                if( stream != null ) {
-		//                    using( var reader = new StreamReader( stream, Encoding.UTF8 ) ) {
-		//                        responseBody = reader.ReadToEnd();
-		//                    }
-		//                }
-		//            }
-		//        }
-		//        var interpretation = m_userContext.InterpretResult( statusCode, responseBody );
-		//    }
-		//}
-
-		//[Test]
-		//public void Example_2_WhatClientCode_ShouldNotLookLike() {
-		//    var statusCode = (HttpStatusCode) (-1);
-		//    string responseBody = "";
-		//    var request = PrepareApiRequest( m_badUserContext, GET_ORGANIZATION_INFO_ROUTE );
-
-		//    HttpWebResponse castResponse = null;
-		//    try {
-		//        using( var response = request.GetResponse() ) {
-		//            castResponse = response as HttpWebResponse;
-		//        }
-		//    } catch( WebException ex ) {
-		//        castResponse = ex.Response as HttpWebResponse;
-		//    }
-		//    if( castResponse != null ) {
-		//        statusCode = castResponse.StatusCode;
-		//        responseBody = GetResponseBody( castResponse );
-		//    }
-		//    var interpretation = m_userContext.InterpretResult( statusCode, responseBody );
-		//}
-		//
-		//private static string GetResponseBody( HttpWebResponse castResponse ) {
-		//    string responseBody = "";
-		//    using( var stream = castResponse.GetResponseStream() ) {
-		//        if( stream != null ) {
-		//            using( var reader = new StreamReader( stream, Encoding.UTF8 ) ) {
-		//                responseBody = reader.ReadToEnd();
-		//            }
-		//        }
-		//    }
-		//    return responseBody;
-		//}
-
-		[Test]
+        [Test]
 		public void SendRequestWithBadKeys_ResponseInterpretationIs_InvalidSig() {
 			var request = PrepareApiRequest( m_badUserContext, GET_ORGANIZATION_INFO_ROUTE );
 
@@ -129,28 +71,6 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 				Assert.AreEqual( RequestResult.RESULT_INVALID_SIG, interpretation );
 			}
 		}
-
-		//[Test]
-		//public void SampleClientPseudocode() {
-		//    var request = PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
-		//    try {
-		//        var response = request.GetResponse() as HttpWebResponse;
-		//        string contents = ReadResponseContents( response );
-		//        //var org = DeserializeResponseContents<Organization>( contents );
-		//    } catch( WebException ex ) {
-		//        //	
-		//        //switch( interpretation ) {
-		//            /* cases:
-		//             * 403, invalid keys (app or user) => app shutdown
-		//             * 403, bad timestamp => app to correct it and retries the request
-		//             * 403, no permission for this user => app displays error message to user and keeps running
-		//             * bad request (400) => can happen, app to decide what to do.
-		//             * resource not found (404) => app displays error message and keeps running
-		//             * server crashed (500)
-		//             */
-		//        //}
-		//    }
-		//}
 
 		[Test]
 		public void SendRequest_WhenBadHostSpec_UnhandledException() {
