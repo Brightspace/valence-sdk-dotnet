@@ -66,10 +66,15 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ConfigHelper.cs" />
+    <Compile Include="Providers\ContextProvider.cs" />
+    <Compile Include="Providers\RequestProvider.cs" />
     <Compile Include="IntegrationTests.cs" />
-    <Compile Include="Helpers\LateTimestampProvider.cs" />
+    <Compile Include="Providers\LateTimestampProvider.cs" />
     <Compile Include="Domain\Organization.cs" />
     <Compile Include="Domain\ProductVersions.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
+    <Compile Include="Providers\RouteProvider.cs" />
     <Compile Include="SecurityTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace D2L.Extensibility.AuthSdk.IntegrationTests.Helpers {
+namespace D2L.Extensibility.AuthSdk.IntegrationTests.Providers {
 	internal sealed class LateTimestampProvider : ITimestampProvider {
 		public LateTimestampProvider( long lagSeconds ) {
 			m_lagSeconds = lagSeconds;

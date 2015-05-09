@@ -7,22 +7,19 @@ using System.Threading;
 using System.Web.Script.Serialization;
 using D2L.Extensibility.AuthSdk.IntegrationTests.Domain;
 using D2L.Extensibility.AuthSdk.IntegrationTests.Helpers;
+using D2L.Extensibility.AuthSdk.IntegrationTests.Providers;
 
 using NUnit.Framework;
 
 namespace D2L.Extensibility.AuthSdk.IntegrationTests {
+
 	[TestFixture]
 	public class IntegrationTests {
+
 		[TestFixtureSetUp]
-		public void ReadConfig() {
-			m_appId = ConfigurationManager.AppSettings[ "appId" ];
-			m_appKey = ConfigurationManager.AppSettings[ "appKey" ];
-			m_userId = ConfigurationManager.AppSettings[ "userId" ];
-			m_userKey = ConfigurationManager.AppSettings[ "userKey" ];
-			m_scheme = ConfigurationManager.AppSettings[ "scheme" ];
-			m_host = ConfigurationManager.AppSettings[ "host" ];
-			m_port = Int32.Parse( ConfigurationManager.AppSettings[ "port" ] );
-		}
+        public void FixtureSetup() {
+            ReadConfig();
+        }
 
 		[SetUp]
 		public void SetUpUserContext() {
@@ -42,28 +39,9 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			//Thread.Sleep( 20*1000 );
 		}
 
-		[Test]
-		public void LearningTest_SendRequestWithBadKeys_ThrowsWebException() {
-			var request = PrepareApiRequest( m_badUserContext, GET_ORGANIZATION_INFO_ROUTE );
-
-			Assert.Throws<WebException>( () => request.GetResponse() );
-		}
-
-		[Test]
-		public void LearningTest_SendRequestWithBadKeys_ResponseBodyContains_Invalid_token() {
-			var request = PrepareApiRequest( m_badUserContext, GET_ORGANIZATION_INFO_ROUTE );
-
-			try {
-				request.GetResponse();
-			} catch( WebException ex ) {
-				var responseBody = ReadResponseContents( ex.Response as HttpWebResponse );
-				Assert.IsTrue( responseBody.Equals( "Invalid token", StringComparison.InvariantCulture ) );
-			}
-		}
-
         [Test]
 		public void SendRequestWithBadKeys_ResponseInterpretationIs_InvalidSig() {
-			var request = PrepareApiRequest( m_badUserContext, GET_ORGANIZATION_INFO_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_badUserContext, GET_ORGANIZATION_INFO_ROUTE );
 
 			try {
 				request.GetResponse();
@@ -78,7 +56,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		public void SendRequest_WhenBadHostSpec_UnhandledException() {
 			var badApiHost = new HostSpec( ChangeScheme( m_scheme ), m_host, m_port );
 			var badAnonContext = m_appContext.CreateAnonymousUserContext( badApiHost );
-			var request = PrepareApiRequest( badAnonContext, GET_VERSIONS_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( badAnonContext, GET_VERSIONS_ROUTE );
 
 			Assert.Throws<WebException>( () => request.GetResponse() );
 		}
@@ -93,7 +71,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			var landingUrl = new UriBuilder( m_scheme, m_host, m_port, GET_ORGANIZATION_INFO_ROUTE ).Uri;
 			var uri = m_appContext.CreateUrlForAuthentication( hostSpec, landingUrl );
 
-			var request = CreateRequest( uri );
+            var request = RequestProvider.CreateRequest( uri );
 
 			Assert.DoesNotThrow( () => request.GetResponse() );
 		}
@@ -104,7 +82,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			var landingUrl = new UriBuilder( m_scheme, m_host, m_port, GET_ORGANIZATION_INFO_ROUTE ).Uri;
 			var uri = m_appContext.CreateUrlForAuthentication( hostSpec, landingUrl );
 
-			var request = CreateRequest( uri );
+            var request = RequestProvider.CreateRequest( uri );
 
 			using( var response = request.GetResponse() as HttpWebResponse ) {
 				Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
@@ -113,14 +91,14 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		
 		[Test]
 		public void SendAuthenticatedRequest_ResponseReceived() {
-			var request = PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
 
 			Assert.DoesNotThrow( () => request.GetResponse() );
 		}
 
 		[Test]
 		public void SendAuthenticatedRequest_StatusCodeIs200() {
-			var request = PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
 
 			using( var response = request.GetResponse() as HttpWebResponse ) {
 				Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
@@ -130,17 +108,17 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
 		[Test]
 		public void SendAuthenticatedRequest_ResponseContentsIsNotEmpty() {
-			var request = PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
 
 			using( var response = request.GetResponse() as HttpWebResponse ) {
-				string contents = ReadResponseContents( response );
+                string contents = StringHelper.ReadResponseContents( response );
 				Assert.IsNotNullOrEmpty( contents );
 			}
 		}
 		
 		[Test]
 		public void SendAuthenticatedRequest_ResponseContents_CanBeDeserializedAsJson() {
-			var request = PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_userContext, GET_ORGANIZATION_INFO_ROUTE );
 
 			using( var response = request.GetResponse() as HttpWebResponse ) {
 				var org = DeserializeResponseContents<Organization>( response );
@@ -150,14 +128,14 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
 		[Test]
 		public void SendAnonymousRequest_ResponseReceived() {
-			var request = PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE);
+            var request = RequestProvider.PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
 
 			Assert.DoesNotThrow( () => request.GetResponse() );
 		}
 
 		[Test]
 		public void SendAnonymousRequest_StatusCodeIs200() {
-			var request = PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
 
 			using( var response = request.GetResponse() as HttpWebResponse ) {
 				Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
@@ -167,17 +145,17 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
 		[Test]
 		public void SendAnonymousRequest_ResponseContentsIsNotEmpty() {
-			var request = PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
 
 			using( var response = request.GetResponse() as HttpWebResponse ) {
-				string contents = ReadResponseContents( response );
+                string contents = StringHelper.ReadResponseContents( response );
 				Assert.IsNotNullOrEmpty( contents );
 			}
 		}
 
 		[Test]
 		public void SendAnonymousRequest_ResponseContents_CanBeDeserializedAsJson() {
-			var request = PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
+            var request = RequestProvider.PrepareApiRequest( m_anonContext, GET_VERSIONS_ROUTE );
 
 			using( var response = request.GetResponse() as HttpWebResponse ) {
 				var versions = DeserializeResponseContents<ProductVersions[]>( response );
@@ -199,7 +177,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			try {
 				request.GetResponse();
 			} catch( WebException ex ) {
-				string responseContents = ReadResponseContents( ex.Response as HttpWebResponse );
+                string responseContents = StringHelper.ReadResponseContents( ex.Response as HttpWebResponse );
 
 				Assert.That( responseContents, Is.StringMatching( "Timestamp out of range\\s?(\\d+)" )  );
 				return;
@@ -267,32 +245,10 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			return request;
 		}
 
-		private HttpWebRequest PrepareApiRequest( ID2LUserContext userContext, string route ) {
-			Uri apiUri = userContext.CreateAuthenticatedUri( route, "GET" );
-			return CreateRequest( apiUri );
-		}
 
-		private static HttpWebRequest CreateRequest( Uri uri ) {
-			var request = (HttpWebRequest) WebRequest.Create( uri );
-			request.Method = "GET";
-			request.Accept = "*/*";
-
-			//	keep the timeout at least 10 seconds,
-			//	otherwise some important errors turn into "operation timed-out" errors
-			request.Timeout = 10*1000;
-			return request;
-		}
-
-		private string ReadResponseContents( HttpWebResponse response ) {
-			using( var stream = response.GetResponseStream() ) {
-				using( var reader = new StreamReader( stream, Encoding.UTF8 ) ) {
-					return reader.ReadToEnd();
-				}
-			}
-		}
 
 		private T DeserializeResponseContents<T>( HttpWebResponse response ) where T : class {
-			string contents = ReadResponseContents( response );
+            string contents = StringHelper.ReadResponseContents( response );
 			var serializer = new JavaScriptSerializer();
 			var resource = serializer.Deserialize<T>( contents );
 			return resource;
@@ -318,6 +274,17 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		private HostSpec GetDefaultApiHost() {
 			return new HostSpec( m_scheme, m_host, m_port );
 		}
+
+        private void ReadConfig() {
+            m_appId = ConfigurationManager.AppSettings["appId"];
+            m_appKey = ConfigurationManager.AppSettings["appKey"];
+            m_userId = ConfigurationManager.AppSettings["userId"];
+            m_userKey = ConfigurationManager.AppSettings["userKey"];
+            m_scheme = ConfigurationManager.AppSettings["scheme"];
+            m_host = ConfigurationManager.AppSettings["host"];
+            m_port = Int32.Parse( ConfigurationManager.AppSettings["port"] );
+        }
+
 
 		private ID2LAppContext m_appContext;
 		private ID2LUserContext m_userContext;
