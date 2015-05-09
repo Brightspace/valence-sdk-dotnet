@@ -39,32 +39,9 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			//Thread.Sleep( 20*1000 );
 		}
 
-        [Test]
-		public void SendRequestWithBadKeys_ResponseInterpretationIs_InvalidSig() {
-            var request = RequestProvider.PrepareApiRequest( m_badUserContext, RouteProvider.OrganizationInfoRoute );
 
-			try {
-				request.GetResponse();
-			} catch( WebException ex ) {
-				var exceptionWrapper = new D2LWebException( ex );
-				var interpretation = m_userContext.InterpretResult( exceptionWrapper );
-				Assert.AreEqual( RequestResult.RESULT_INVALID_SIG, interpretation );
-			}
-		}
 
-		[Test]
-		public void SendRequest_WhenBadHostSpec_UnhandledException() {
-			var badApiHost = new HostSpec( ChangeScheme( m_scheme ), m_host, m_port );
-			var badAnonContext = m_appContext.CreateAnonymousUserContext( badApiHost );
-            var request = RequestProvider.PrepareApiRequest( badAnonContext, GET_VERSIONS_ROUTE );
-
-			Assert.Throws<WebException>( () => request.GetResponse() );
-		}
-
-		private string ChangeScheme( string scheme ) {
-			return scheme == "https" ? "http" : "https";
-		}
-
+		
 		[Test]
 		public void SendRequest_AtUrlForAuthentication_ResponseReceived() {
 			var hostSpec = new HostSpec( m_scheme, m_host, m_port );

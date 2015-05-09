@@ -17,6 +17,10 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests.Providers {
             return m_appContext.CreateAnonymousUserContext( CreateHostSpec() );
         }
 
+        internal static ID2LUserContext AnonUserContext( HostSpec host ) {
+            return m_appContext.CreateAnonymousUserContext( host );
+        }
+
         internal static ID2LUserContext BadUserContext() {
             return m_appContext.CreateUserContext( "foo", "bar", CreateHostSpec() );
         }
