@@ -67,6 +67,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\ConfigHelper.cs" />
+    <Compile Include="LearningTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Providers\ContextProvider.cs" />
     <Compile Include="Providers\RequestProvider.cs" />
     <Compile Include="IntegrationTests.cs" />
