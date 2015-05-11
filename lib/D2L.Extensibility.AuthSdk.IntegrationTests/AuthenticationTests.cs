@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading;
-using D2L.Extensibility.AuthSdk;
 using D2L.Extensibility.AuthSdk.IntegrationTests.Domain;
 using D2L.Extensibility.AuthSdk.IntegrationTests.Helpers;
 using D2L.Extensibility.AuthSdk.IntegrationTests.Providers;
@@ -9,117 +7,145 @@ using NUnit.Framework;
 
 namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
-    [TestFixture]
-    public class AuthenticationTests {
+	[TestFixture]
+	public class AuthenticationTests {
 
-        private const long TEST_TIME_DELAY = 600L;
-        
-        private HttpWebRequest m_request;
+		private const long TEST_TIME_DELAY = 600L;
 
-        [SetUp]
-        public void TestSetup() {
-            m_request = RequestProvider.PrepareApiRequest( ContextProvider.UserContext(), RouteProvider.OrganizationInfoRoute );
-        }
+		private HttpWebRequest m_request;
 
-        [Test]
-        public void SendAuthenticatedRequest_ResponseContents_CanBeDeserializedAsJson() {
-            using ( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) {
-                Organization org = StringHelper.DeserializeResponseContents<Organization>( response );
-                Assert.IsNotNull( org );
-            }
-        }
+		[SetUp]
+		public void TestSetup() {
+			m_request = RequestProvider.PrepareApiRequest( ContextProvider.UserContext(), RouteProvider.OrganizationInfoRoute );
+		}
 
-        [Test]
-        public void SendAuthenticatedRequest_ResponseContents_IsNotEmpty() {
-            using ( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) {
-                string contents = StringHelper.ReadResponseContents( response );
-                Assert.IsNotNullOrEmpty( contents );
-            }
-        }
+		[Test]
+		public void SendAuthenticatedRequest_ResponseContents_CanBeDeserializedAsJson() {
+			using( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) {
+				Organization org = StringHelper.DeserializeResponseContents<Organization>( response );
+				Assert.IsNotNull( org );
+			}
+		}
 
-        [Test]
-        public void SendAuthenticatedRequest_ResponseReceived() {
-            Assert.DoesNotThrow( () => { using ( m_request.GetResponse() as HttpWebResponse ) { } } );
-        }
+		[Test]
+		public void SendAuthenticatedRequest_ResponseContents_IsNotEmpty() {
+			using( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) {
+				string contents = StringHelper.ReadResponseContents( response );
+				Assert.IsNotNullOrEmpty( contents );
+			}
+		}
 
-        [Test]
-        public void SendAuthenticatedRequest_StatusCodeIs200() {
-            using ( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) {
-                Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
-            }
-        }
+		[Test]
+		public void SendAuthenticatedRequest_ResponseReceived() {
+			Assert.DoesNotThrow( () => { using( m_request.GetResponse() as HttpWebResponse ) { } } );
+		}
 
-        [Test]
-        public void SendRequest_AtUrlForAuthentication_StatusCodeIs200() {
-            Uri landingUrl = new UriBuilder( ConfigHelper.Scheme, ConfigHelper.Host, ConfigHelper.Port, RouteProvider.OrganizationInfoRoute ).Uri;
-            Uri uri = ContextProvider.AuthenticatedUrl( landingUrl );
+		[Test]
+		public void SendAuthenticatedRequest_StatusCodeIs200() {
+			using( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) {
+				Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
+			}
+		}
 
-            HttpWebRequest request = RequestProvider.CreateRequest( uri );
+		[Test]
+		public void SendRequest_AtUrlForAuthentication_StatusCodeIs200() {
+			Uri landingUrl = new UriBuilder( ConfigHelper.Scheme, ConfigHelper.Host, ConfigHelper.Port, RouteProvider.OrganizationInfoRoute ).Uri;
+			Uri uri = ContextProvider.AuthenticatedUrl( landingUrl );
 
-            using ( HttpWebResponse response = request.GetResponse() as HttpWebResponse ) {
-                Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
-            }
-        }
+			HttpWebRequest request = RequestProvider.CreateRequest( uri );
 
-        [Test]
-        public void SendRequest_AtUrlForAuthentication_ResponseReceived() {
-            Uri landingUrl = new UriBuilder( ConfigHelper.Scheme, ConfigHelper.Host, ConfigHelper.Port, RouteProvider.OrganizationInfoRoute ).Uri;
-            Uri uri = ContextProvider.AuthenticatedUrl( landingUrl );
+			using( HttpWebResponse response = request.GetResponse() as HttpWebResponse ) {
+				Assert.AreEqual( HttpStatusCode.OK, response.StatusCode );
+			}
+		}
 
-            HttpWebRequest request = RequestProvider.CreateRequest( uri );
+		[Test]
+		public void SendRequest_AtUrlForAuthentication_ResponseReceived() {
+			Uri landingUrl = new UriBuilder( ConfigHelper.Scheme, ConfigHelper.Host, ConfigHelper.Port, RouteProvider.OrganizationInfoRoute ).Uri;
+			Uri uri = ContextProvider.AuthenticatedUrl( landingUrl );
 
-            Assert.DoesNotThrow( () => { using ( HttpWebResponse response = request.GetResponse() as HttpWebResponse ) { } } );
-        }
+			HttpWebRequest request = RequestProvider.CreateRequest( uri );
 
-        [Test]
-        public void SendAuthenticatedRequestWithDelayedTimestamp_ResponseMustContainTimeOffset() {
-            ID2LAppContext appContext = CreateAppContextWithDelay( ConfigHelper.AppId, ConfigHelper.AppKey, TEST_TIME_DELAY );
-            ID2LUserContext userContext = ContextProvider.UserContext( appContext );
-            Uri uri = userContext.CreateAuthenticatedUri( RouteProvider.OrganizationInfoRoute, "GET" );
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create( uri );
-            request.Method = "GET";
+			Assert.DoesNotThrow( () => { using( HttpWebResponse response = request.GetResponse() as HttpWebResponse ) { } } );
+		}
 
-            try {
-                using ( request.GetResponse() as HttpWebResponse ) { }
-            } catch ( WebException ex ) {
-                string responseContents = StringHelper.ReadResponseContents( ex.Response as HttpWebResponse );
+		[Test]
+		public void SendAuthenticatedRequestWithDelayedTimestamp_ResponseMustContainTimeOffset() {
+			ID2LAppContext appContext = CreateAppContextWithDelay( ConfigHelper.AppId, ConfigHelper.AppKey, TEST_TIME_DELAY );
+			ID2LUserContext userContext = ContextProvider.UserContext( appContext );
+			Uri uri = userContext.CreateAuthenticatedUri( RouteProvider.OrganizationInfoRoute, "GET" );
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create( uri );
+			request.Method = "GET";
 
-                Assert.That( responseContents, Is.StringMatching( "Timestamp out of range\\s?(\\d+)" ) );
-                return;
-            }
-            Assert.Fail( "Expected WebException was not thrown" );
-        }
+			try {
+				using( request.GetResponse() as HttpWebResponse ) { }
+			} catch( WebException ex ) {
+				string responseContents = StringHelper.ReadResponseContents( ex.Response as HttpWebResponse );
 
-        public void RetryAuthenticatedRequestWithCorrectedTimestamp_ResultCodeIs200() {
-            ID2LAppContext appContext = CreateAppContextWithDelay( ConfigHelper.AppId, ConfigHelper.AppKey, TEST_TIME_DELAY );
-            ID2LUserContext userContext = ContextProvider.UserContext( appContext );
-            Uri uri = userContext.CreateAuthenticatedUri( RouteProvider.OrganizationInfoRoute, "GET" );
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create( uri );
-            request.Method = "GET";
+				Assert.That( responseContents, Is.StringMatching( "Timestamp out of range\\s?(\\d+)" ) );
+				return;
+			}
+			Assert.Fail( "Expected WebException was not thrown" );
+		}
 
-            try {
-                using ( request.GetResponse() as HttpWebResponse ) { }
-            } catch ( WebException ex ) {
-                var exWrapper = new D2LWebException( ex );
-                userContext.InterpretResult( exWrapper );
-            }
+		public void RetryAuthenticatedRequestWithCorrectedTimestamp_ResultCodeIs200() {
+			ID2LAppContext appContext = CreateAppContextWithDelay( ConfigHelper.AppId, ConfigHelper.AppKey, TEST_TIME_DELAY );
+			ID2LUserContext userContext = ContextProvider.UserContext( appContext );
+			Uri uri = userContext.CreateAuthenticatedUri( RouteProvider.OrganizationInfoRoute, "GET" );
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create( uri );
+			request.Method = "GET";
 
-            Uri retryUri = userContext.CreateAuthenticatedUri( RouteProvider.OrganizationInfoRoute, "GET" );
-            HttpWebRequest retryRequest = (HttpWebRequest)WebRequest.Create( retryUri );
-            retryRequest.Method = "GET";
+			try {
+				using( request.GetResponse() as HttpWebResponse ) { }
+			} catch( WebException ex ) {
+				var exWrapper = new D2LWebException( ex );
+				userContext.InterpretResult( exWrapper );
+			}
 
-            Assert.DoesNotThrow( () => { using ( HttpWebResponse response = retryRequest.GetResponse() as HttpWebResponse ) { } } );
-        }
+			Uri retryUri = userContext.CreateAuthenticatedUri( RouteProvider.OrganizationInfoRoute, "GET" );
+			HttpWebRequest retryRequest = (HttpWebRequest)WebRequest.Create( retryUri );
+			retryRequest.Method = "GET";
 
-        private static ID2LAppContext CreateAppContextWithDelay( string appId, string appKey, long delaySeconds ) {
+			Assert.DoesNotThrow( () => { using( HttpWebResponse response = retryRequest.GetResponse() as HttpWebResponse ) { } } );
+		}
 
-            var timestampProvider = CreateTimestampProviderDelay( delaySeconds );
-            var factory = new D2LAppContextFactory( timestampProvider );
-            return factory.Create( appId, appKey );
-        }
+		[Test]
+		public void SendRequestWithBadKeys_ResponseInterpretationIs_InvalidSig() {
+			ID2LUserContext badContext = ContextProvider.BadUserContext();
+			HttpWebRequest request = RequestProvider.PrepareApiRequest( badContext, RouteProvider.OrganizationInfoRoute );
 
-        private static ITimestampProvider CreateTimestampProviderDelay( long seconds ) {
-            return new LateTimestampProvider( seconds );
-        }
-    }
+			try {
+				using( HttpWebResponse response = request.GetResponse() as HttpWebResponse ) { }
+			} catch( WebException ex ) {
+				var exceptionWrapper = new D2LWebException( ex );
+				var interpretation = badContext.InterpretResult( exceptionWrapper );
+				Assert.AreEqual( RequestResult.RESULT_INVALID_SIG, interpretation );
+			}
+		}
+
+		[Test]
+		public void SendRequest_WhenBadHostSpec_UnhandledException() {
+			HostSpec badApiHost = new HostSpec( ChangeScheme( ConfigHelper.Scheme ), ConfigHelper.Host, ConfigHelper.Port );
+			ID2LUserContext badAnonContext = ContextProvider.AnonUserContext( badApiHost );
+
+			HttpWebRequest request = RequestProvider.PrepareApiRequest( badAnonContext, RouteProvider.VersionsRoute );
+
+			Assert.Throws<WebException>( () => { using( HttpWebResponse response = request.GetResponse() as HttpWebResponse ) { } } );
+		}
+
+		private string ChangeScheme( string scheme ) {
+			return scheme == "https" ? "http" : "https";
+		}
+
+		private static ID2LAppContext CreateAppContextWithDelay( string appId, string appKey, long delaySeconds ) {
+
+			var timestampProvider = CreateTimestampProviderDelay( delaySeconds );
+			var factory = new D2LAppContextFactory( timestampProvider );
+			return factory.Create( appId, appKey );
+		}
+
+		private static ITimestampProvider CreateTimestampProviderDelay( long seconds ) {
+			return new LateTimestampProvider( seconds );
+		}
+	}
 }

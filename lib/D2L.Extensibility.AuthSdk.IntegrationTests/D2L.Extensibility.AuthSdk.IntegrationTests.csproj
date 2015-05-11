@@ -79,7 +79,6 @@
     <Compile Include="Domain\ProductVersions.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Providers\RouteProvider.cs" />
-    <Compile Include="SecurityTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs" />

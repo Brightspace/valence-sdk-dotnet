@@ -6,32 +6,32 @@ using NUnit.Framework;
 
 namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
-    [TestFixture]
-    public class LearningTests {
+	[TestFixture]
+	public class LearningTests {
 
-        private HttpWebRequest m_request;
+		private HttpWebRequest m_request;
 
-        [SetUp]
-        public void TestSetup() {
-            m_request = RequestProvider.PrepareApiRequest( ContextProvider.BadUserContext(), RouteProvider.OrganizationInfoRoute );
-        }
+		[SetUp]
+		public void TestSetup() {
+			m_request = RequestProvider.PrepareApiRequest( ContextProvider.BadUserContext(), RouteProvider.OrganizationInfoRoute );
+		}
 
-        [Test]
-        public void LearningTest_SendRequestWithBadKeys_ThrowsWebException() {
-            Assert.Throws<WebException>( () => { using ( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) { } } );
-        }
+		[Test]
+		public void LearningTest_SendRequestWithBadKeys_ThrowsWebException() {
+			Assert.Throws<WebException>( () => { using( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) { } } );
+		}
 
-        [Test]
-        public void LearningTest_SendRequestWithBadKeys_ResponseBodyContains_Invalid_token() {
-            string responseBody = string.Empty;
+		[Test]
+		public void LearningTest_SendRequestWithBadKeys_ResponseBodyContains_Invalid_token() {
+			string responseBody = string.Empty;
 
-            try {
-                using ( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) { }
-            } catch ( WebException ex ) {
-                responseBody = StringHelper.ReadResponseContents( ex.Response as HttpWebResponse );
-            }
+			try {
+				using( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) { }
+			} catch( WebException ex ) {
+				responseBody = StringHelper.ReadResponseContents( ex.Response as HttpWebResponse );
+			}
 
-            Assert.IsTrue( responseBody.Equals( "Invalid token", StringComparison.InvariantCulture ) );
-        }
-    }
+			Assert.IsTrue( responseBody.Equals( "Invalid token", StringComparison.InvariantCulture ) );
+		}
+	}
 }
