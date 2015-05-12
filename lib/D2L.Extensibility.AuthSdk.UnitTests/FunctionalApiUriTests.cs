@@ -298,7 +298,7 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		}
 
 		[Test]
-		public void UserContext_CreateAuthUri_MultipleQuerystringsAreNotPresent() {
+		public void UserContext_CreateAuthUri_MultipleQuerystringSegmentsAreNotPresent() {
 			const string querystringCharacterEncoded = "%3F";
 
 			Uri queryUrl = m_userContext.CreateAuthenticatedUri( TestConstants.API_PATH_WITH_QUERY, "GET" );
