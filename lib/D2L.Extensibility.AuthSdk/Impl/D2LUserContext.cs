@@ -17,18 +17,18 @@ namespace D2L.Extensibility.AuthSdk.Impl {
         }
 
         private Uri CreateApiUrl(string path) {
-			
+
             var builder = m_apiHost.ToUriBuilder();
 
-	        if( !path.Contains( "?" ) ) {
-		        builder.Path = path;
-	        } else {
-		        string[] pathParts = path.Split( new[] {'?'}, 2 );
-		        builder.Path = pathParts[0];
-		        builder.Query = pathParts[1];
-	        }
+            if( !path.Contains( "?" ) ) {
+                builder.Path = path;
+            } else {
+                string[] pathParts = path.Split( new[] {'?'}, 2 );
+                builder.Path = pathParts[0];
+                builder.Query = pathParts[1];
+            }
 
-			return builder.Uri;
+            return builder.Uri;
         }
 
         public Uri CreateAuthenticatedUri(string path, string httpMethod) {
