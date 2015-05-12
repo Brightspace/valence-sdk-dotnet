@@ -19,7 +19,15 @@ namespace D2L.Extensibility.AuthSdk.Impl {
         private Uri CreateApiUrl(string path) {
 
             var builder = m_apiHost.ToUriBuilder();
-            builder.Path = path;
+
+            if( !path.Contains( "?" ) ) {
+                builder.Path = path;
+            } else {
+                string[] pathParts = path.Split( new[] {'?'}, 2 );
+                builder.Path = pathParts[0];
+                builder.Query = pathParts[1];
+            }
+
             return builder.Uri;
         }
 
