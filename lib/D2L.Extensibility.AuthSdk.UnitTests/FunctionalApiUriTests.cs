@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
+using System.Web;
 using NUnit.Framework;
 using System.Globalization;
 
@@ -288,7 +290,7 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		}
 
 		[Test]
-		public void UserContext_CreateAuthUri_QuerystringIsMaintained() {
+		public void UserContext_CreateAuthUri_PathQuerystringIsPresent() {
 			Uri queryUrl = m_userContext.CreateAuthenticatedUri( TestConstants.API_PATH_WITH_QUERY, "GET" );
 
 			Assert.IsTrue(
@@ -298,10 +300,19 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		}
 
 		[Test]
+		public void UserContext_CreateAuthUri_PathQuerystringIsMerged() {
+			Uri queryUrl = m_userContext.CreateAuthenticatedUri( TestConstants.API_PATH_WITH_QUERY, "GET" );
+			NameValueCollection query = HttpUtility.ParseQueryString( queryUrl.Query );
+
+			Assert.AreEqual( "baz", query["bar"], "The path querystring is not present." );
+			Assert.IsNotNullOrEmpty( query["x_a"], "The first Valence querystring parameter is not present." );
+		}
+
+		[Test]
 		public void UserContext_CreateAuthUri_MultipleQuerystringSegmentsAreNotPresent() {
 			const string querystringCharacterEncoded = "%3F";
-
 			Uri queryUrl = m_userContext.CreateAuthenticatedUri( TestConstants.API_PATH_WITH_QUERY, "GET" );
+
 			bool duplicatedQuery = (
 				queryUrl.ToString().Contains( "?" ) &&
 				queryUrl.ToString().Contains( querystringCharacterEncoded )
