@@ -18,7 +18,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 
 		[Test]
 		public void SendAnonymousRequest_ResponseReceived() {
-			Assert.DoesNotThrow( () => { using( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) { } } );
+			Assert.DoesNotThrow( () => { using( m_request.GetResponse() as HttpWebResponse ) {} } );
 		}
 
 		[Test]
