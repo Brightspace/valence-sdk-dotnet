@@ -288,6 +288,32 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		}
 
 		[Test]
+		public void UserContext_CreateAuthUri_QuerystringIsMaintained() {
+			Uri queryUrl = m_userContext.CreateAuthenticatedUri( TestConstants.API_PATH_WITH_QUERY, "GET" );
+
+			Assert.IsTrue(
+				queryUrl.ToString().Contains( TestConstants.API_PATH_QUERYSTRING ),
+				"The querystring parameter was not present"
+				);
+		}
+
+		[Test]
+		public void UserContext_CreateAuthUri_MultipleQuerystringsAreNotPresent() {
+			const string querystringCharacterEncoded = "%3F";
+
+			Uri queryUrl = m_userContext.CreateAuthenticatedUri( TestConstants.API_PATH_WITH_QUERY, "GET" );
+			bool duplicatedQuery = (
+				queryUrl.ToString().Contains( "?" ) &&
+				queryUrl.ToString().Contains( querystringCharacterEncoded )
+				);
+
+			Assert.IsFalse(
+				duplicatedQuery,
+				"Both the querystring character and the encoded querystring character are present."
+				);
+		}
+
+		[Test]
 		public void UserContext_CreateAuthUri_IfThereIsClockSkew_SignatureUsesAdjustedTimestamp() {
 			const string httpMethod = "POST";
 			const long serverClockSkewMilliseconds = 343000;
