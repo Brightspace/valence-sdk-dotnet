@@ -27,7 +27,7 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		public void DefaultTimestampProvider_GetTimestamp_ReturnsValueInRange() {
 			ITimestampProvider provider = new DefaultTimestampProvider();
 			long timestamp = provider.GetCurrentTimestampInMilliseconds();
-			Assert.That( ref timestamp,
+			Assert.That( timestamp,
 				Is.AtMost( IF_MORE_BASE_YEAR_MAY_BE_WRONG ).And.AtLeast( IF_LESS_UNITS_ARE_WRONG ) );
 		}
 

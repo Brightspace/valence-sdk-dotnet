@@ -1,25 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F1118A17-454B-437D-BA24-FC8A3A901A3E}"
-	ProjectSection(SolutionItems) = preProject
-		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Extensibility.AuthSdk", "D2L.Extensibility.AuthSdk\D2L.Extensibility.AuthSdk.csproj", "{2809EA0A-360C-48F2-B24A-F7244876135A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D2L.Extensibility.AuthSdk", "D2L.Extensibility.AuthSdk\D2L.Extensibility.AuthSdk.csproj", "{2809EA0A-360C-48F2-B24A-F7244876135A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Extensibility.AuthSdk.UnitTests", "D2L.Extensibility.AuthSdk.UnitTests\D2L.Extensibility.AuthSdk.UnitTests.csproj", "{926A5290-9D94-4A77-9C3D-98380E0B901A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Extensibility.AuthSdk.IntegrationTests", "D2L.Extensibility.AuthSdk.IntegrationTests\D2L.Extensibility.AuthSdk.IntegrationTests.csproj", "{18F44624-5476-4F70-8081-C01124AA209F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{64F57678-76A4-4882-94C4-1221F6C80E5E}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,5 +30,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0356448C-F1FB-4D4E-AC4A-8E4BF2F0EF45}
 	EndGlobalSection
 EndGlobal

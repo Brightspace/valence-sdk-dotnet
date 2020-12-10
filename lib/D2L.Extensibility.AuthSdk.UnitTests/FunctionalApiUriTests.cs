@@ -305,7 +305,7 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 			NameValueCollection query = HttpUtility.ParseQueryString( queryUrl.Query );
 
 			Assert.AreEqual( "baz", query["bar"], "The path querystring is not present." );
-			Assert.IsNotNullOrEmpty( query["x_a"], "The first Valence querystring parameter is not present." );
+			Assert.IsNotNull( query["x_a"], "The first Valence querystring parameter is not present." );
 		}
 
 		[Test]

@@ -111,7 +111,7 @@ namespace D2L.Extensibility.AuthSdk.Impl {
             long serverTimestampSeconds;
             if( timestampParser.TryParseTimestamp( responseBody, out serverTimestampSeconds ) ) {
                 long clientTimestampMilliseconds = m_timestampProvider.GetCurrentTimestampInMilliseconds();
-                m_serverSkewMillis = serverTimestampSeconds * 1000 - clientTimestampMilliseconds;
+                m_serverSkewMillis = (serverTimestampSeconds * 1000) - clientTimestampMilliseconds;
                 return true;
             }
             return false;
