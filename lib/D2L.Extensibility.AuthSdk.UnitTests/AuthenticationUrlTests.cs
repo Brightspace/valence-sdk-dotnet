@@ -12,7 +12,7 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		private HostSpec m_testHostSpec;
 		private Uri m_landingUri;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void SetUpTestObjects() {
 			m_testHostSpec = new HostSpec( "https", TestConstants.HOST_NAME, TestConstants.PORT );
 			m_landingUri = new Uri( TestConstants.API_URL );

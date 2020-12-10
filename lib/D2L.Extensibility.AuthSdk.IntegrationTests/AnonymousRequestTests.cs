@@ -38,7 +38,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 				contents = StringHelper.ReadResponseContents( response );
 			}
 
-			Assert.IsNotNullOrEmpty( contents );
+			Assert.IsNotNull( contents );
 		}
 
 		[Test]

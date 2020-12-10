@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Text;
-using System.Web.Script.Serialization;
+using System.Text.Json;
 
 namespace D2L.Extensibility.AuthSdk.IntegrationTests.Helpers {
 
@@ -10,8 +9,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests.Helpers {
 
         internal static T DeserializeResponseContents<T>( HttpWebResponse response ) where T : class {
             string contents = StringHelper.ReadResponseContents( response );
-            var serializer = new JavaScriptSerializer();
-            var resource = serializer.Deserialize<T>( contents );
+            var resource = JsonSerializer.Deserialize<T>( contents );
             return resource;
         }
 

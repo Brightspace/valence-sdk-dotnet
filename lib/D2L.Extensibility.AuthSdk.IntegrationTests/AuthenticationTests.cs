@@ -31,7 +31,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 		public void SendAuthenticatedRequest_ResponseContents_IsNotEmpty() {
 			using( HttpWebResponse response = m_request.GetResponse() as HttpWebResponse ) {
 				string contents = StringHelper.ReadResponseContents( response );
-				Assert.IsNotNullOrEmpty( contents );
+				Assert.IsNotNull( contents );
 			}
 		}
 
@@ -82,7 +82,7 @@ namespace D2L.Extensibility.AuthSdk.IntegrationTests {
 			} catch( WebException ex ) {
 				string responseContents = StringHelper.ReadResponseContents( ex.Response as HttpWebResponse );
 
-				Assert.That( responseContents, Is.StringMatching( "Timestamp out of range\\s?(\\d+)" ) );
+				StringAssert.IsMatch( "Timestamp out of range\\s?(\\d+)", responseContents );
 				return;
 			}
 			Assert.Fail( "Expected WebException was not thrown" );

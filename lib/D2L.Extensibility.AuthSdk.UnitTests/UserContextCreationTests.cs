@@ -9,7 +9,7 @@ namespace D2L.Extensibility.AuthSdk.UnitTests {
 		private Uri m_authCallbackUri;
 		private HostSpec m_apiHost;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void SetUpTestObjects() {
 			m_authCallbackUri = TestUtils.CreateTestAuthenticationCallbackUri(
 				TestConstants.USER_ID, TestConstants.USER_KEY );
