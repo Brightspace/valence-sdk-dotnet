@@ -10,12 +10,13 @@
 		internal static int Port { get; private set; }
 
 		static ConfigHelper() {
-			AppId = "G9nUpvbZQyiPrk3um2YAkQ";
-			AppKey = "ybZu7fm_JKJTFwKEHfoZ7Q";
+        // Provision this static helper with the ID-Key App Key, App ID, and Brightspace domain
+			AppId = "VALENCE_APP_ID_HERE";
+			AppKey = "VALENCE_APP_KEY_HERE";
 			UserId = "SomeUserId";
 			UserKey = "SomeUserKey";
 			Scheme = "https";
-			Host = "devcop.brightspacedemo.com";
+			Host = "BRIGHTSPACE_DOMAIN_HERE";
 			Port = 443;
 		}
 	}

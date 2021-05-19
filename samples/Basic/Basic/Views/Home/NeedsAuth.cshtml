@@ -12,8 +12,8 @@
         <title>Basic Demo App - Login required</title>
     </head>
     <body>
-        <p>You must first log into your LMS.</p>
-        <p>By default this sample points to an LMS hosted at devcop.brightspacedemo.com. You can use the user "DevCoPStudent" with the password "/10T41.Vf\0w~=O" to log in.</p>
+        <p>You must first log into your Brightspace LMS, and ensure that you register this application in Manage Extensibility as an ID-Key application.</p>
+        <p>Then, provision the Web.config file with the App ID, App Key, and domain name of your Brightspace host. Once so provisioned, you can use the ID-Key authentication workflow to authenticate an LMS user for testing with this app.</p>
         <p>If you have already authenticated with the LMS you will not need to enter your password to re-login with this app. To force a global logout, log in and log out of the LMS manually.</p>
         <a href="@ViewBag.valenceAuthUrl">Log in</a>
     </body>
