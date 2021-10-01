@@ -13,6 +13,7 @@
 		<Copyright>Copyright © D2L Corporation 2019</Copyright>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<IncludeSymbols>true</IncludeSymbols>
+    <RepositoryUrl>https://github.com/NcuGit/systems</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='net40'">
