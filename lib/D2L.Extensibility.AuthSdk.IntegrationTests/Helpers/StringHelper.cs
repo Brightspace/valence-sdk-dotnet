@@ -2,20 +2,30 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace D2L.Extensibility.AuthSdk.IntegrationTests.Helpers {
+namespace D2L.Extensibility.AuthSdk.IntegrationTests.Helpers
+{
 
-    internal static class StringHelper {
+    internal static class StringHelper
+    {
 
-        internal static T DeserializeResponseContents<T>( HttpWebResponse response ) where T : class {
-            string contents = StringHelper.ReadResponseContents( response );
-            var resource = JsonSerializer.Deserialize<T>( contents );
+        internal static T DeserializeResponseContents<T>(HttpWebResponse response) where T : class
+        {
+            string contents = StringHelper.ReadResponseContents(response);
+
+            JsonSerializerOptions options = new JsonSerializerOptions() { NumberHandling = JsonNumberHandling.AllowReadingFromString };
+
+            var resource = JsonSerializer.Deserialize<T>(contents, options);
             return resource;
         }
 
-        internal static string ReadResponseContents( HttpWebResponse response ) {
-            using ( var stream = response.GetResponseStream() ) {
-                using ( var reader = new StreamReader( stream, Encoding.UTF8 ) ) {
+        internal static string ReadResponseContents(HttpWebResponse response)
+        {
+            using (var stream = response.GetResponseStream())
+            {
+                using (var reader = new StreamReader(stream, Encoding.UTF8))
+                {
                     return reader.ReadToEnd();
                 }
             }
